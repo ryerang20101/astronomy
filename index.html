@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>우주 탐험대 · 태양계 퀴즈</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Jua&family=Nanum+Gothic:wght@400;700;800&display=swap');
+    :root { --ink:#17233d; --purple:#6656e9; --yellow:#ffd44d; --mint:#4edbbd; --card:#fffdfa; }
+    * { box-sizing:border-box; }
+    body { margin:0; min-height:100vh; color:var(--ink); font-family:'Nanum Gothic',sans-serif; background:#201a51; overflow-x:hidden; }
+    body::before { content:''; position:fixed; inset:0; z-index:-2; background:radial-gradient(circle at 18% 20%,#463fa4 0 1px,transparent 2px),radial-gradient(circle at 72% 12%,#fff 0 1.5px,transparent 2.5px),radial-gradient(circle at 90% 62%,#b9b8ff 0 1px,transparent 2px),radial-gradient(circle at 35% 77%,#fff 0 1px,transparent 2px),linear-gradient(145deg,#17133d,#31256d 60%,#182e66); background-size:85px 91px,120px 130px,75px 80px,100px 120px,100% 100%; }
+    .wrap { width:min(100%,960px); margin:0 auto; padding:30px 22px 48px; }
+    header { display:flex; align-items:center; justify-content:space-between; color:white; margin-bottom:24px; }
+    .brand { font-family:Jua,sans-serif; font-size:clamp(25px,4vw,38px); letter-spacing:.5px; }
+    .brand span { color:var(--yellow); }
+    .score-pill { background:rgba(255,255,255,.14); border:1px solid rgba(255,255,255,.25); border-radius:99px; padding:10px 16px; font-weight:800; font-size:14px; }
+    .space-scene { height:160px; position:relative; overflow:hidden; border-radius:28px 28px 0 0; background:linear-gradient(125deg,#42359f,#171745); }
+    .sun { position:absolute; width:116px; height:116px; border-radius:50%; background:radial-gradient(circle at 35% 35%,#fff3a4 0 7%,#ffd343 28%,#ff9c25 60%,#ec5c22); left:7%; top:21px; box-shadow:0 0 28px #ffbe32,0 0 65px #ff9e22; }
+    .planet { position:absolute; border-radius:50%; animation:float 4s ease-in-out infinite; }
+    .mercury { width:21px;height:21px;top:58px;left:33%;background:#b9a89d; }
+    .earth { width:60px;height:60px;top:43px;left:47%;background:radial-gradient(circle at 35% 30%,#8ad6ff 0 20%,#2789dc 21% 55%,#1769bc 56%); box-shadow:inset -10px -8px 0 #1260ab; }
+    .earth:after { content:''; position:absolute; width:27px;height:14px;background:#72c66e;border-radius:60% 35% 50% 45%;top:19px;left:8px;transform:rotate(-18deg); }
+    .saturn { width:76px;height:76px;top:32px;right:16%;background:radial-gradient(circle at 35% 27%,#ffe7a8,#d59b59 67%,#a75e36); }
+    .saturn:before { content:''; position:absolute; width:120px;height:30px;border:8px solid #e6c78f;border-left-color:#a87346;border-right-color:#a87346;border-radius:50%;left:-30px;top:20px;transform:rotate(-15deg); }
+    .rocket { position:absolute; right:5%; top:12px; font-size:42px; transform:rotate(22deg); animation:fly 5s ease-in-out infinite; }
+    @keyframes float { 50%{transform:translateY(-9px)} } @keyframes fly { 50%{transform:translate(-13px,9px) rotate(18deg)} }
+    .quiz-card { background:var(--card); border-radius:0 0 28px 28px; padding:30px clamp(20px,5vw,52px) 34px; box-shadow:0 20px 42px rgba(6,5,32,.3); }
+    .meta { display:flex; align-items:center; justify-content:space-between; font-weight:800; color:#746f8d; font-size:14px; }
+    .progress { height:10px; background:#eae7f4; border-radius:99px; margin:12px 0 26px; overflow:hidden; }
+    .progress > i { display:block; height:100%; width:10%; background:linear-gradient(90deg,#42d7c4,#7170ec); border-radius:inherit; transition:width .4s; }
+    .badge { display:inline-flex; align-items:center; gap:7px; color:#5b49cc; font-weight:800; background:#efedff; border-radius:99px; padding:7px 12px; font-size:13px; }
+    h1 { font-family:Jua,sans-serif; font-size:clamp(27px,4vw,40px); line-height:1.35; margin:14px 0 20px; font-weight:400; }
+    .answers { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    button { font:inherit; cursor:pointer; }
+    .answer { min-height:76px; text-align:left; background:white; border:2px solid #e7e5ee; border-radius:17px; padding:12px 15px; font-weight:800; font-size:17px; color:var(--ink); transition:transform .15s,border-color .15s,background .15s; }
+    .answer:hover:not(:disabled) { transform:translateY(-2px); border-color:#9188f5; background:#f9f8ff; }
+    .answer:focus-visible,.next:focus-visible { outline:4px solid #ffcb48; outline-offset:3px; }
+    .answer.correct { border-color:#27b891; background:#e6fff5; color:#087558; }
+    .answer.wrong { border-color:#ed6e79; background:#fff0f1; color:#bc3543; }
+    .feedback { min-height:66px; display:flex; align-items:center; gap:12px; margin-top:17px; border-radius:15px; padding:11px 15px; background:#f5f4f9; color:#5f5a73; font-size:14px; line-height:1.55; }
+    .feedback strong { display:block; color:var(--ink); margin-bottom:2px; }
+    .feedback .face { font-size:26px; }
+    .next { display:none; margin:19px 0 0 auto; border:0; border-radius:99px; background:var(--purple); color:white; padding:14px 23px; font-weight:800; box-shadow:0 6px 0 #4439b0; }
+    .next:hover { background:#5749d8; } .next:active { transform:translateY(4px); box-shadow:0 2px 0 #4439b0; }
+    .result { display:none; text-align:center; padding:10px 0 0; }
+    .result .trophy { font-size:72px; } .result h2 { font-family:Jua,sans-serif;font-size:38px;font-weight:400;margin:6px 0; }
+    .result p { color:#625d75; line-height:1.65; } .restart { margin-top:9px; background:var(--yellow); color:#513700; border:0; border-radius:99px; padding:15px 25px; font-weight:800; font-size:16px; box-shadow:0 6px 0 #e7a928; }
+    .footer-note { color:#cbc8ef; text-align:center; font-size:12px; margin-top:22px; }
+    @media(max-width:560px){ .wrap{padding:18px 14px 32px}.space-scene{height:132px}.sun{transform:scale(.8);transform-origin:left top}.saturn{right:9%;transform:scale(.75)}.earth{left:47%;top:54px;transform:scale(.8)}.rocket{font-size:30px}.answers{grid-template-columns:1fr}.quiz-card{padding:24px 18px}.answer{min-height:62px}.score-pill{padding:8px 11px} }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header><div class="brand">우주 탐험대 <span>퀴즈</span></div><div class="score-pill">⭐ 점수 <b id="score">0</b></div></header>
+    <section class="space-scene" aria-hidden="true"><div class="sun"></div><div class="planet mercury"></div><div class="planet earth"></div><div class="planet saturn"></div><div class="rocket">🚀</div></section>
+    <section class="quiz-card" aria-live="polite">
+      <div id="game">
+        <div class="meta"><span id="count">문제 1 / 10</span><span>태양계 탐험 중!</span></div><div class="progress"><i id="bar"></i></div>
+        <span class="badge">🪐 행성 박사 되기</span><h1 id="question"></h1>
+        <div class="answers" id="answers"></div>
+        <div class="feedback" id="feedback"><span class="face">💡</span><div><strong>정답을 골라 볼까요?</strong>천천히 읽고 가장 알맞은 답을 눌러 주세요.</div></div>
+        <button class="next" id="next">다음 문제 →</button>
+      </div>
+      <div class="result" id="result"><div class="trophy" id="trophy">🏆</div><h2 id="resultTitle"></h2><p id="resultText"></p><button class="restart" id="restart">다시 탐험하기 🚀</button></div>
+    </section>
+    <p class="footer-note">정답을 맞히며 태양계를 한 바퀴 여행해요!</p>
+  </main>
+  <script>
+    const questions = [
+      ['태양계에서 가장 큰 행성은 무엇일까요?', ['지구','목성','화성','수성'], 1, '목성은 태양계에서 가장 크고, 줄무늬가 멋진 거대 행성이에요!'],
+      ['우리가 살고 있는 행성은 어디일까요?', ['금성','지구','토성','해왕성'], 1, '맞아요! 지구는 푸른 바다와 공기가 있는 특별한 행성이에요.'],
+      ['고리가 가장 눈에 띄는 행성은 무엇일까요?', ['토성','수성','화성','천왕성'], 0, '토성의 고리는 얼음과 돌 조각들이 모여 만들어졌어요.'],
+      ['태양에서 가장 가까운 행성은 무엇일까요?', ['금성','지구','수성','화성'], 2, '수성은 태양 바로 옆을 빠르게 돌고 있어요.'],
+      ['“붉은 행성”이라는 별명을 가진 행성은?', ['화성','목성','해왕성','금성'], 0, '화성 표면의 붉은 흙 때문에 그렇게 불러요.'],
+      ['태양계의 중심에서 빛과 열을 내는 것은?', ['달','태양','별똥별','지구'], 1, '태양은 아주 뜨거운 별이에요. 우리에게 빛과 따뜻함을 줘요!'],
+      ['지구 주위를 도는 천체는 무엇일까요?', ['달','토성','태양','혜성'], 0, '달은 지구의 친구 같은 자연 위성이에요.'],
+      ['태양에서 가장 멀리 있는 행성은?', ['천왕성','해왕성','목성','토성'], 1, '해왕성은 아주 멀고 차가운 푸른 행성이에요.'],
+      ['태양계에는 행성이 모두 몇 개 있을까요?', ['6개','7개','8개','9개'], 2, '수성부터 해왕성까지, 태양계 행성은 8개예요!'],
+      ['금성은 어느 쪽에서 지구의 이웃일까요?', ['태양 쪽','해왕성 쪽','토성 쪽','목성 쪽'], 0, '금성은 지구보다 태양에 더 가까운 이웃 행성이에요.']
+    ];
+    let index = 0, score = 0, answered = false;
+    const $ = id => document.getElementById(id);
+    function render(){
+      answered=false; const q=questions[index]; $('count').textContent=`문제 ${index+1} / ${questions.length}`; $('bar').style.width=`${(index/questions.length)*100}%`; $('question').textContent=q[0]; $('feedback').innerHTML='<span class="face">💡</span><div><strong>정답을 골라 볼까요?</strong>천천히 읽고 가장 알맞은 답을 눌러 주세요.</div>'; $('next').style.display='none';
+      $('answers').innerHTML=''; q[1].forEach((answer,i)=>{ const b=document.createElement('button'); b.className='answer'; b.textContent=answer; b.onclick=()=>choose(i); $('answers').appendChild(b); });
+    }
+    function choose(choice){ if(answered)return; answered=true; const q=questions[index], buttons=[...document.querySelectorAll('.answer')], correct=choice===q[2]; buttons.forEach((b,i)=>{b.disabled=true;if(i===q[2])b.classList.add('correct');else if(i===choice)b.classList.add('wrong')}); if(correct){score++; $('score').textContent=score; $('feedback').innerHTML=`<span class="face">🎉</span><div><strong>정답이에요! 정말 잘했어요!</strong>${q[3]}</div>`;}else{$('feedback').innerHTML=`<span class="face">🌟</span><div><strong>아쉬워요, 그래도 괜찮아요!</strong>${q[3]}</div>`;} $('next').textContent=index===questions.length-1?'결과 보기 ✨':'다음 문제 →'; $('next').style.display='block'; }
+    $('next').onclick=()=>{ index++; if(index<questions.length)render(); else showResult(); };
+    function showResult(){ $('game').style.display='none'; $('result').style.display='block'; $('bar').style.width='100%'; const title=score===10?'완벽한 우주 박사!':score>=7?'멋진 우주 탐험가!':'태양계 새싹 탐험가!'; $('resultTitle').textContent=title; $('trophy').textContent=score===10?'🏆':score>=7?'🌟':'🪐'; $('resultText').innerHTML=`10문제 중 <b>${score}문제</b>를 맞혔어요!<br>다시 도전하면 더 많은 행성 친구를 만날 수 있어요.`; }
+    $('restart').onclick=()=>{index=0;score=0;$('score').textContent=0;$('game').style.display='block';$('result').style.display='none';render();}; render();
+  </script>
+</body>
+</html>
