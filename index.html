@@ -4,12 +4,329 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Making Kids</title>
-</head>
-<body>
-  <h1>Fun Fun Astronomy!</h1>
+  <title>Making Kids | Fun Fun Astronomy!</title>
 
-  <a href="solar_system_quiz.html">태양계 퀴즈</a>
-  
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: "Arial", sans-serif;
+      color: white;
+      background: linear-gradient(
+        145deg,
+        #060b20 0%,
+        #101b46 55%,
+        #26154b 100%
+      );
+      overflow-x: hidden;
+    }
+
+    /* 반짝이는 별 배경 */
+    .stars {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .star {
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      background: white;
+      border-radius: 50%;
+      animation: twinkle 3s infinite alternate;
+    }
+
+    @keyframes twinkle {
+      from { opacity: 0.2; transform: scale(0.7); }
+      to { opacity: 1; transform: scale(1.4); }
+    }
+
+    /* 메인 콘텐츠 */
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 1100px;
+      margin: auto;
+      padding: 30px 24px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 0;
+    }
+
+    .logo {
+      font-size: 22px;
+      font-weight: bold;
+      color: #b9c9ff;
+    }
+
+    .header-label {
+      font-size: 13px;
+      color: #aebce5;
+    }
+
+    /* 타이틀 영역 */
+    .hero {
+      text-align: center;
+      padding: 90px 0 65px;
+    }
+
+    .planet {
+      font-size: 85px;
+      margin-bottom: 25px;
+      animation: float 5s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+    }
+
+    .hero h1 {
+      font-size: clamp(34px, 6vw, 62px);
+      margin-bottom: 22px;
+      background: linear-gradient(
+        90deg,
+        #ffffff,
+        #a9c5ff,
+        #d4b7ff
+      );
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero p {
+      font-size: 17px;
+      color: #c2cbea;
+      line-height: 1.9;
+    }
+
+    /* 콘텐츠 제목 */
+    .section-title {
+      font-size: 25px;
+      margin-bottom: 25px;
+    }
+
+    .section-description {
+      color: #aebce5;
+      margin-bottom: 30px;
+      line-height: 1.7;
+    }
+
+    /* 웹앱 카드 */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(
+        auto-fit,
+        minmax(240px, 1fr)
+      );
+      gap: 24px;
+    }
+
+    .card {
+      display: flex;
+      flex-direction: column;
+      min-height: 260px;
+      padding: 30px;
+      border-radius: 22px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.15);
+      backdrop-filter: blur(12px);
+      transition: transform 0.3s, background 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+      background: rgba(255,255,255,0.13);
+    }
+
+    .card-icon {
+      font-size: 45px;
+      margin-bottom: 20px;
+    }
+
+    .card h3 {
+      font-size: 21px;
+      margin-bottom: 13px;
+    }
+
+    .card p {
+      color: #bdc8e7;
+      font-size: 14px;
+      line-height: 1.7;
+      margin-bottom: 25px;
+    }
+
+    .card a {
+      display: inline-block;
+      align-self: flex-start;
+      margin-top: auto;
+      padding: 12px 20px;
+      border-radius: 12px;
+      background: #798dff;
+      color: white;
+      font-weight: bold;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+
+    .card a:hover {
+      background: #a0afff;
+    }
+
+    /* 준비 중 카드 */
+    .coming-soon {
+      opacity: 0.65;
+    }
+
+    .coming-soon span {
+      margin-top: auto;
+      color: #aebce5;
+      font-size: 13px;
+    }
+
+    footer {
+      margin-top: 100px;
+      padding: 35px 0;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      text-align: center;
+      color: #8291bd;
+      font-size: 13px;
+    }
+
+    @media (max-width: 600px) {
+      .hero { padding: 65px 0 50px; }
+      .hero p { font-size: 15px; }
+      .planet { font-size: 65px; }
+      .card { min-height: 230px; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- 별 배경 -->
+  <div class="stars" id="stars"></div>
+
+  <div class="container">
+
+    <!-- 상단 -->
+    <header>
+      <div class="logo">✦ Making Kids</div>
+      <div class="header-label">SPACE LEARNING LAB</div>
+    </header>
+
+    <!-- 메인 타이틀 -->
+    <section class="hero">
+      <div class="planet">🪐</div>
+
+      <h1>Fun Fun Astronomy!</h1>
+
+      <p>
+        신나는 우주 탐험을 시작해 볼까요?<br>
+        퀴즈와 게임으로 배우는 재미있는 천문학!<br>
+        우주의 신비를 함께 발견해요.
+      </p>
+    </section>
+
+    <!-- 웹앱 목록 -->
+    <section>
+      <h2 class="section-title">
+        🚀 우주 탐험 프로그램
+      </h2>
+
+      <p class="section-description">
+        원하는 프로그램을 선택하고
+        즐거운 우주 여행을 시작하세요!
+      </p>
+
+      <div class="card-grid">
+
+        <!-- 태양계 퀴즈 -->
+        <div class="card">
+          <div class="card-icon">🌞</div>
+
+          <h3>태양계 퀴즈</h3>
+
+          <p>
+            태양과 여덟 행성에 대해 얼마나 알고 있나요?
+            재미있는 퀴즈로 태양계 지식을 확인해 보세요!
+          </p>
+
+          <a href="solar_system_quiz.html">
+            퀴즈 시작하기 →
+          </a>
+        </div>
+
+        <!-- 추후 추가할 프로그램 -->
+        <div class="card coming-soon">
+          <div class="card-icon">🌌</div>
+
+          <h3>별자리 탐험</h3>
+
+          <p>
+            밤하늘의 별자리를 찾아보고
+            별에 얽힌 이야기를 알아보세요.
+          </p>
+
+          <span>COMING SOON</span>
+        </div>
+
+        <div class="card coming-soon">
+          <div class="card-icon">🚀</div>
+
+          <h3>우주 미션 게임</h3>
+
+          <p>
+            우주 탐험가가 되어
+            다양한 미션에 도전해 보세요!
+          </p>
+
+          <span>COMING SOON</span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 하단 -->
+    <footer>
+      <p>Making Kids | Fun Fun Astronomy!</p>
+      <p>Explore · Discover · Create</p>
+    </footer>
+
+  </div>
+
+  <script>
+    // 별 100개를 무작위 위치에 생성
+    const starsContainer = document.getElementById("stars");
+
+    for (let i = 0; i < 100; i++) {
+      const star = document.createElement("div");
+      star.className = "star";
+
+      star.style.left = Math.random() * 100 + "%";
+      star.style.top = Math.random() * 100 + "%";
+
+      const size = Math.random() * 2.5 + 1;
+      star.style.width = size + "px";
+      star.style.height = size + "px";
+
+      star.style.animationDelay = Math.random() * 4 + "s";
+
+      starsContainer.appendChild(star);
+    }
+  </script>
+
 </body>
 </html>
